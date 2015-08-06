@@ -1,8 +1,12 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+import os
+os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
+
+
+class NewVisitorTest(LiveServerTestCase):
     
     def setUp(self):
         self.driver = webdriver.Remote(
@@ -23,7 +27,15 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app.
         # She goes to check out its homepage
-        self.driver.get('http://192.168.99.100:8000')
+
+        # self.live_server_url does not work with docker setup.  Don't know how to change url
+        # away from "localhost" - Hardcoding the default port (that live_server_url uses) 
+        # for the test - NOT a very good thing
+        # Need to bind docker container to 2 ports when spinning up 8000 - normal 8081 - testing
+        # print (self.live_server_url)
+        # self.driver.get(self.live_server_url)
+        self.driver.get('http://192.168.99.100:8081')
+        
 
         # She notices the page title and header mention to-do lists
         self.assertIn('To-Do', self.driver.title)
@@ -63,5 +75,3 @@ class NewVisitorTest(unittest.TestCase):
         # She visits that URL - her to-do list is still there.
 
         # Satisfied, she goes back to sleep
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
