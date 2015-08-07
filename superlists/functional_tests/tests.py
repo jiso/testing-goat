@@ -95,6 +95,7 @@ class NewVisitorTest(LiveServerTestCase):
         
         # Again, there is no trace of Edith's list
         page_text = self.driver.find_element_by_tag_name('body').text
+        self.driver.implicitly_wait(3)
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
         
