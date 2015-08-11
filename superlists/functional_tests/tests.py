@@ -5,8 +5,35 @@ from selenium.webdriver.common.keys import Keys
 import os
 os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
 
+import sys
+
+DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
+
 
 class NewVisitorTest(StaticLiveServerTestCase):
+    
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super().setUpClass()
+        ## hard code for docker setup because boot2docker does not use localhost
+        # self.live_server_url does not work with docker setup.  Don't know how to change url
+        # away from "localhost" - Hardcoding the default port (that live_server_url uses) 
+        # for the test - NOT a very good thing
+        # Need to bind docker container to 2 ports when spinning up 8000 - normal 8081 - testing
+        # print (self.live_server_url)
+        # self.driver.get(self.live_server_url) - update from self to cls. due to setUpClass
+        # cls.server_url = cls.live_server_url
+        cls.server_url = DOCKER_TEST_SERVER_URL
+    
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == DOCKER_TEST_SERVER_URL:
+            super().tearDownClass()
+        
     
     def setUp(self):
         self.get_firefox_browser_from_selenium_hub()
@@ -31,13 +58,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # Edith has heard about a cool new online to-do app.
         # She goes to check out its homepage
 
-        # self.live_server_url does not work with docker setup.  Don't know how to change url
-        # away from "localhost" - Hardcoding the default port (that live_server_url uses) 
-        # for the test - NOT a very good thing
-        # Need to bind docker container to 2 ports when spinning up 8000 - normal 8081 - testing
-        # print (self.live_server_url)
-        # self.driver.get(self.live_server_url)
-        self.driver.get('http://192.168.99.100:8081')
+        self.driver.get(self.server_url)
         
 
         # She notices the page title and header mention to-do lists
@@ -78,7 +99,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.get_firefox_browser_from_selenium_hub()
         
         # Francis visits the home page.  There is no sign of Edith's list
-        self.driver.get('http://192.168.99.100:8081')
+        self.driver.get(self.server_url)
         page_text = self.driver.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('make a fl', page_text)
@@ -103,7 +124,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         
     def test_layout_and_styling(self):
         # Edith goes to the home page
-        self.driver.get('http://192.168.99.100:8081')
+        self.driver.get(self.server_url)
         self.driver.set_window_size(1024, 758)
         
         # She notices the input box is nicely centered
