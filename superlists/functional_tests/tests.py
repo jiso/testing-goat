@@ -44,7 +44,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
             desired_capabilities={
                 "browserName": "firefox"
             })
-        self.driver.implicitly_wait(3)
+        self.driver.implicitly_wait(10)
 
     def check_for_row_in_list_table(self, row_text):
         table = self.driver.find_element_by_id('id_list_table')
@@ -81,6 +81,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox.send_keys(Keys.ENTER)
         edith_list_url = self.driver.current_url
         self.assertRegex(edith_list_url, '/lists/.+')
+        self.driver.implicitly_wait(5)
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         
         # There is still a text box inviting her to add another item. She
@@ -116,7 +117,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         
         # Again, there is no trace of Edith's list
         page_text = self.driver.find_element_by_tag_name('body').text
-        self.driver.implicitly_wait(3)
+        self.driver.implicitly_wait(5)
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
         
@@ -126,7 +127,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # Edith goes to the home page
         self.driver.get(self.server_url)
         self.driver.set_window_size(1024, 758)
-        
+        self.driver.implicitly_wait(5)
         # She notices the input box is nicely centered
         inputbox = self.driver.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
