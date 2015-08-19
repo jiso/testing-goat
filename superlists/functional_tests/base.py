@@ -44,7 +44,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             desired_capabilities={
                 "browserName": "firefox"
             })
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(5)
 
     def check_for_row_in_list_table(self, row_text):
         table = self.driver.find_element_by_id('id_list_table')
