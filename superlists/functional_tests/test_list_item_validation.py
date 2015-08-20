@@ -36,7 +36,7 @@ class ItemValidationTest(FunctionalTest):
         self.check_for_row_in_list_table('1: Buy wellies')
         
         # she accidentlly tries to enter a duplicate item
-        self.get_item_input_box().send_keys('Buy wellies')
+        self.get_item_input_box().send_keys('Buy wellies\n')
         
         # she sees a helpful error message
         self.check_for_row_in_list_table('1: Buy wellies')
