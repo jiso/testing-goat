@@ -53,3 +53,6 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def tearDown(self):
         self.driver.quit()
+        
+    def get_item_input_box(self):
+        self.driver.find_element_by_id('id_text')
