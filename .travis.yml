@@ -11,7 +11,7 @@ env:
   global:
 # - DJANGO="x.y.z"
   - DJANGO_SETTINGS_MODULE="superlists.superlists.settings"
-  - PYTHONPATH="/home/travis/build/jiso/testing-goat/superlists"
+  - PYTHONPATH="/home/travis/build/jiso/testing-goat"
   - PIP_USE_MIRRORS=true
 # Last two for OS X, courtesy of stackoverflow.com/a/22697917/419005
 # - CFLAGS=-Qunused-arguments
