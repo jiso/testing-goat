@@ -26,7 +26,7 @@ before_script:
 
 script:
   - python superlists/manage.py syncdb --noinput
-  - coverage run --source lists,superlists --branch --omit lists/migrations/*,lists/tests/* manage.py test lists
+  - coverage run --source lists,superlists --branch --omit lists/migrations/*,lists/tests/* superlists/manage.py test lists
 #  - python superlists/manage.py test
 after_success:
   - coveralls
