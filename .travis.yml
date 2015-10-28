@@ -1,0 +1,28 @@
+language: python
+
+python:
+  # - 2.6
+  # - 2.7
+  - 3.3
+
+services: postgresql
+
+env:
+  global:
+# - DJANGO="x.y.z"
+  - DJANGO_SETTINGS_MODULE="superlists.superlists.settings"
+  - PYTHONPATH="/home/travis/build/jiso/testing-goat/superlists"
+  - PIP_USE_MIRRORS=true
+# Last two for OS X, courtesy of stackoverflow.com/a/22697917/419005
+# - CFLAGS=-Qunused-arguments
+# - CPPFLAGS=-Qunused-arguments
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+  - psql -c "CREATE DATABASE travisdb;" -U postgres
+
+script:
+  - python manage.py syncdb --noinput
+  - python manage.py test
