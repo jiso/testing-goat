@@ -2,8 +2,10 @@ language: python
 
 python:
   # - 2.6
-  # - 2.7
+  - 2.7
   - 3.3
+  - 3.4
+  - 3.5
 
 services: postgresql
 
@@ -25,8 +27,9 @@ before_script:
   - psql -c "CREATE DATABASE travisdb;" -U postgres
 
 script:
-  - python superlists/manage.py syncdb --noinput
-  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* superlists/manage.py test
+  - cd superlists
+  - python manage.py syncdb --noinput
+  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
 #  - python superlists/manage.py test
 after_success:
   - coveralls
