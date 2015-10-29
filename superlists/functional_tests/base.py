@@ -3,15 +3,14 @@
 '''
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
-# from selenium.webdriver.common.keys import Keys
-# from unittest import skip
 
-import os
-os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
+# import os
+# os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
 
 import sys
 
-DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
+# DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
+DEFAULT_WAIT = 5
 
 class FunctionalTest(StaticLiveServerTestCase):
     '''Base Class for Selenium Test Classes'''
@@ -40,7 +39,9 @@ class FunctionalTest(StaticLiveServerTestCase):
 
 
     def setUp(self):
-        self.get_firefox_browser_from_selenium_hub()
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(DEFAULT_WAIT)
+        # self.get_firefox_browser_from_selenium_hub()
 
     def get_firefox_browser_from_selenium_hub(self):
         '''setup firefox browser instance for selenium use'''
