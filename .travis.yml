@@ -32,7 +32,8 @@ before_script:
 script:
   - cd superlists
   - python manage.py migrate --noinput
-  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
+  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test functional_tests.test_layout_and_styling
+#  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
 #  - python superlists/manage.py test
 after_success:
   - coveralls
