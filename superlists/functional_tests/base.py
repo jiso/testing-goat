@@ -34,7 +34,8 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if cls.server_url == DOCKER_TEST_SERVER_URL:
+        # if cls.server_url == DOCKER_TEST_SERVER_URL:
+        if cls.server_url == cls.live_server_url:
             super().tearDownClass()
 
 
