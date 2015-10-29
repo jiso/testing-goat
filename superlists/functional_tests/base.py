@@ -9,7 +9,7 @@ os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
 
 import sys
 
-DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
+# DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
 DEFAULT_WAIT = 5
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -29,8 +29,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         # Need to bind docker container to 2 ports when spinning up 8000 - normal 8081 - testing
         # print (self.live_server_url)
         # self.driver.get(self.live_server_url) - update from self to cls. due to setUpClass
-        # cls.server_url = cls.live_server_url
-        cls.server_url = DOCKER_TEST_SERVER_URL
+        cls.server_url = cls.live_server_url
+        # cls.server_url = DOCKER_TEST_SERVER_URL
 
     @classmethod
     def tearDownClass(cls):
@@ -41,6 +41,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(DEFAULT_WAIT)
+        self.driver.set_page_load_timeout(DEFAULT_WAIT)
         # self.get_firefox_browser_from_selenium_hub()
 
     def get_firefox_browser_from_selenium_hub(self):
