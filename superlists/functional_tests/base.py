@@ -29,14 +29,14 @@ class FunctionalTest(StaticLiveServerTestCase):
         # Need to bind docker container to 2 ports when spinning up 8000 - normal 8081 - testing
         # print (self.live_server_url)
         # self.driver.get(self.live_server_url) - update from self to cls. due to setUpClass
-        if os.environ['TRAVIS'] == 'true':
+        if os.environ['TRAVIS_CI'] == 'true':
             cls.server_url = cls.live_server_url
         else:
             cls.server_url = DOCKER_TEST_SERVER_URL
 
     @classmethod
     def tearDownClass(cls):
-        if os.environ['TRAVIS'] == 'true':
+        if os.environ['TRAVIS_CI'] == 'true':
             if cls.server_url == cls.live_server_url:
                 super().tearDownClass()
         else:
@@ -44,7 +44,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                 super().tearDownClass()
 
     def setUp(self):
-        if os.environ['TRAVIS'] == 'true':
+        if os.environ['TRAVIS_CI'] == 'true':
             self.driver = webdriver.Firefox()
             self.driver.implicitly_wait(DEFAULT_WAIT)
             self.driver.set_page_load_timeout(DEFAULT_WAIT)
