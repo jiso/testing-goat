@@ -9,7 +9,7 @@ os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
 
 import sys
 
-# DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
+DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
 DEFAULT_WAIT = 5
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -29,21 +29,28 @@ class FunctionalTest(StaticLiveServerTestCase):
         # Need to bind docker container to 2 ports when spinning up 8000 - normal 8081 - testing
         # print (self.live_server_url)
         # self.driver.get(self.live_server_url) - update from self to cls. due to setUpClass
-        cls.server_url = cls.live_server_url
-        # cls.server_url = DOCKER_TEST_SERVER_URL
+        if os.environ['TRAVIS'] == 'true':
+            cls.server_url = cls.live_server_url
+        else:
+            cls.server_url = DOCKER_TEST_SERVER_URL
 
     @classmethod
     def tearDownClass(cls):
-        # if cls.server_url == DOCKER_TEST_SERVER_URL:
-        if cls.server_url == cls.live_server_url:
-            super().tearDownClass()
-
+        if os.environ['TRAVIS'] == 'true':
+            if cls.server_url == cls.live_server_url:
+                super().tearDownClass()
+        else:
+            if cls.server_url == DOCKER_TEST_SERVER_URL:
+                super().tearDownClass()
 
     def setUp(self):
-        self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(DEFAULT_WAIT)
-        self.driver.set_page_load_timeout(DEFAULT_WAIT)
-        # self.get_firefox_browser_from_selenium_hub()
+        if os.environ['TRAVIS'] == 'true':
+            self.driver = webdriver.Firefox()
+            self.driver.implicitly_wait(DEFAULT_WAIT)
+            self.driver.set_page_load_timeout(DEFAULT_WAIT)
+        else:
+            self.get_firefox_browser_from_selenium_hub()
+
 
     def get_firefox_browser_from_selenium_hub(self):
         '''setup firefox browser instance for selenium use'''
@@ -53,6 +60,9 @@ class FunctionalTest(StaticLiveServerTestCase):
                 "browserName": "firefox"
             })
         self.driver.implicitly_wait(5)
+        self.driver.implicitly_wait(DEFAULT_WAIT)
+        self.driver.set_page_load_timeout(DEFAULT_WAIT)
+        
 
     def check_for_row_in_list_table(self, row_text):
         ''' checks for value in table'''
