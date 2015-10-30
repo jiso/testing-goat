@@ -32,6 +32,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         if os.environ['TRAVIS_CI'] == 'true':
             cls.server_url = cls.live_server_url
         else:
+            print('why am i here - setUpClass')
             cls.server_url = DOCKER_TEST_SERVER_URL
 
     @classmethod
@@ -40,6 +41,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             if cls.server_url == cls.live_server_url:
                 super().tearDownClass()
         else:
+            print('why am i here - tearDownClass')
             if cls.server_url == DOCKER_TEST_SERVER_URL:
                 super().tearDownClass()
 
@@ -49,6 +51,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             self.driver.implicitly_wait(DEFAULT_WAIT)
             self.driver.set_page_load_timeout(DEFAULT_WAIT)
         else:
+            print('why am i here - setUp')
             self.get_firefox_browser_from_selenium_hub()
 
 
