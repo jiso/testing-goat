@@ -11,6 +11,7 @@ services: postgresql
 
 env:
   global:
+  - TRAVIS_CI='true'
 # - DJANGO="x.y.z"
   - DJANGO_SETTINGS_MODULE="superlists.settings"
   - PYTHONPATH="/home/travis/build/jiso/testing-goat/superlists"
@@ -37,3 +38,9 @@ script:
 #  - python superlists/manage.py test
 after_success:
   - coveralls
+
+notifications:
+  email:
+    on_success: 'change'# default: change
+    on_failure: 'change'
+
