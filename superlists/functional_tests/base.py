@@ -10,6 +10,7 @@ os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = '0.0.0.0:8081'
 import sys
 
 DOCKER_TEST_SERVER_URL = 'http://192.168.99.100:8081'
+
 DEFAULT_WAIT = 5
 
 class FunctionalTest(StaticLiveServerTestCase):
