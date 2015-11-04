@@ -8,6 +8,7 @@ env:
   - DJANGO_SETTINGS_MODULE="superlists.settings"
   - PYTHONPATH="/home/travis/build/jiso/testing-goat/superlists"
   - PIP_USE_MIRRORS=true
+  - DATABASE_URL='postgres://postgres:@localhost:5432/travisdb'
 install:
 - pip install -r requirements.txt
 - pip install coveralls
@@ -19,7 +20,7 @@ before_script:
 script:
   - cd superlists
   - python manage.py migrate --noinput
-  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
+  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test --
 #  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
 #  - python superlists/manage.py test
 after_success:
