@@ -9,14 +9,11 @@ env:
   - PYTHONPATH="/home/travis/build/jiso/testing-goat/superlists"
   - PIP_USE_MIRRORS=true
   - DATABASE_URL='postgres://postgres:@localhost:5432/travisdb'
-# before_install:
-#   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1024x758x16"
 install:
   - pip install -r requirements.txt
   - pip install coveralls
 before_script:
   - psql -c "CREATE DATABASE travisdb;" -U postgres
-# to specify screen size use before_install
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - sleep 3
@@ -25,8 +22,8 @@ script:
   - python manage.py migrate --noinput
   - python manage.py collectstatic --noinput
   - phantomjs static/tests/runner.js static/tests/test.html
-  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test functional_tests
-#  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
+  - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
+ # - coverage run --source lists,superlists --branch --omit */migrations/*,*/tests/*,*/functional_tests/* manage.py test
 #  - python superlists/manage.py test
 # after_success:
 #   - coveralls
@@ -34,10 +31,10 @@ notifications:
   email:
     on_success: change
     on_failure: change
-# deploy:
-#   provider: heroku
-#   api_key:
-#     secure: 1b9ZPbIwAoVxGiU5uU0UP0c2iEqdqSeGYoCJ9sDpL9BF1u0Et6u1my42D5S7tD4oUzHVTKyDPNwZJ5mct2CH4/CHO1L0LeHuVNmCYPd/znIvNnMstthQXAbRDdistIDbKsqYUAUOAf7myxPzs9jFMwT2fiNrk729UVuCvZIJql8toOvem/JnFp0W7L79Qcy5IRc8a5NCDUlGD9h9xi4AZ2FWtfz+UcSt/I8R4OWfBhZSVJihFt4nbhZfzyINDIU1g558+IK9sbgBapzLJFHuiuQqGmf5Q1Y+jIM8z8U0hhrSkk2okVD+4B90I0QY73WSGRIf7JlJhpxisOQPYc29owX5FrL6Sc+v6krc5vD3rjI8pCXpqZhzwSdSFiqQrmBzJ9Fo6V2fTZzMheyimnEwLDZ9DUySya0/4BWhzbYzCk0lQr2ecur0Z/AXrxVGLwRq0YLsOPCOQn+Qzi1hROopj1b3d6TwYG9kgjk9ciD1hnMGJgKyv1FyZKncVfZr4Eouc6iwLQtqml1cmDIWnEbdvlBIG+if18gsY0z0C3tYXWWZSMyOEUy4j+aZU7DFJUXNi7McAWOv/jPBq6T/KLldVwsDgv00rgmJ+POkbIYBTSptpprQyJUwR8dNrMzBQrFJv2m4EYJ4EkMGb1McoZC6dp/FjPWOGsC9h6yFvuws/1I=
-#   app: quiet-peak-3610
-#   on:
-#     repo: jiso/testing-goat
+deploy:
+  provider: heroku
+  api_key:
+    secure: 1b9ZPbIwAoVxGiU5uU0UP0c2iEqdqSeGYoCJ9sDpL9BF1u0Et6u1my42D5S7tD4oUzHVTKyDPNwZJ5mct2CH4/CHO1L0LeHuVNmCYPd/znIvNnMstthQXAbRDdistIDbKsqYUAUOAf7myxPzs9jFMwT2fiNrk729UVuCvZIJql8toOvem/JnFp0W7L79Qcy5IRc8a5NCDUlGD9h9xi4AZ2FWtfz+UcSt/I8R4OWfBhZSVJihFt4nbhZfzyINDIU1g558+IK9sbgBapzLJFHuiuQqGmf5Q1Y+jIM8z8U0hhrSkk2okVD+4B90I0QY73WSGRIf7JlJhpxisOQPYc29owX5FrL6Sc+v6krc5vD3rjI8pCXpqZhzwSdSFiqQrmBzJ9Fo6V2fTZzMheyimnEwLDZ9DUySya0/4BWhzbYzCk0lQr2ecur0Z/AXrxVGLwRq0YLsOPCOQn+Qzi1hROopj1b3d6TwYG9kgjk9ciD1hnMGJgKyv1FyZKncVfZr4Eouc6iwLQtqml1cmDIWnEbdvlBIG+if18gsY0z0C3tYXWWZSMyOEUy4j+aZU7DFJUXNi7McAWOv/jPBq6T/KLldVwsDgv00rgmJ+POkbIYBTSptpprQyJUwR8dNrMzBQrFJv2m4EYJ4EkMGb1McoZC6dp/FjPWOGsC9h6yFvuws/1I=
+  app: quiet-peak-3610
+  on:
+    repo: jiso/testing-goat
